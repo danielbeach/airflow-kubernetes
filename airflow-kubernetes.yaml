@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: airflowkube
+ namespace: airflow-on-kubernetes
+spec:
+ replicas: 1
+ template:
+ metadata:
+ labels:
+ name: airflowkube
+ spec:
+ serviceAccountName: airflowkube
+ containers:
+ - name: webserver
+ - name: scheduler
