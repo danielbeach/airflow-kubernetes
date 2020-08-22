@@ -1,16 +1,48 @@
-apiVersion: extensions/v1beta1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
- name: airflowkube
- namespace: airflow-on-kubernetes
+  name: airflow
 spec:
- replicas: 1
- template:
- metadata:
- labels:
- name: airflowkube
- spec:
- serviceAccountName: airflowkube
- containers:
- - name: webserver
- - name: scheduler
+  replicas: 1
+  selector:
+    matchLabels:
+      deploy: airflow
+  template:
+    metadata:
+      labels:
+        deploy: airflow
+    spec:
+      containers:
+      - name: airflow-scheduler
+        env:
+          - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+            valueFrom:
+              configMapKeyRef:
+                name: airflow-config           # The ConfigMap this value comes from.
+                key: sql_alchemy_conn # The key to fetch.
+          - name: AIRFLOW__CORE__EXECUTOR
+            valueFrom:
+              configMapKeyRef:
+                name: airflow-config
+                key: executor
+        image: docker.io/apache/airflow
+        command: ["airflow"]
+        args: ["scheduler"]
+      - name: airflow-webserver
+        env:
+          - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+            valueFrom:
+              configMapKeyRef:
+                name: airflow-config           # The ConfigMap this value comes from.
+                key: sql_alchemy_conn # The key to fetch.
+          - name: AIRFLOW__CORE__EXECUTOR
+            valueFrom:
+              configMapKeyRef:
+                name: airflow-config
+                key: executor
+        image: docker.io/apache/airflow
+        ports:
+        - containerPort: 8080
+        command: ["airflow"]
+        args: ["webserver"]
+      restartPolicy: Always

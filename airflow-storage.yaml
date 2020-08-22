@@ -1,5 +1,5 @@
 kind: PersistentVolume
-apiVersion: v1
+apiVersion: apps/v1
 metadata:
  name: airflow-dags
 spec:
