@@ -17,7 +17,7 @@ Complete walkthrough blog. https://www.confessionsofadataguy.com/deploying-apach
                       apache-airflow[postgres]==1.10.10 \
                       --constraint \
                       https://raw.githubusercontent.com/apache/airflow/1.10.10/requirements/requirements-python3.7.txt`
-10. Set environment variable. `export AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql://airflow:airflow@localhost:5432/postgres`
+10. Set environment variable. `export AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql://airflow:airflow@localhost:5432/airflow`
 11. run command `airflow initdb` , then exit SSH to machine.
 12.`kubectl apply -f airflow-kubernetes.yaml`
 13. `kubectl describe pods` You should see your Airflow PODs.
